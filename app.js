@@ -87,19 +87,21 @@ app.post('/login', (req, res) => {
 // Rota para processar o formulário de caastro depostagem
 app.post('/cadastrar_posts', (req, res) => {
     const { titulo, conteudo } = req.body;
+    const autor = "admin";
+    const datapostagem = new Date();
 
     // const query = 'SELECT * FROM users WHERE username = ? AND password = SHA1(?)';
-    const query = 'INSERT INTO posts (titulo, conteudo) VALUES (?,?)';
+    const query = 'INSERT INTO posts (titulo, conteudo, autor, datapostagem) VALUES (?,?,?,?)';
 
-    db.query(query, [titulo, conteudo], (err, results) => {
+    db.query(query, [titulo, conteudo, autor, datapostagem], (err, results) => {
         if (err) throw err;
-
-        if (results.length > 0) {
+        console.log(`Rotina cadastrar posts: ${JSON.stringify(results)}`); //Sring imprimível
+        if (results.affectedRows > 0) {
             console.log('Cadastro de postagem OK')
             res.redirect('/dashboard');
         } else {
             // res.send('Credenciais incorretas. <a href="/">Tente novamente</a>');
-            res.send('Cadastro de post não efetuado');
+            res.redirect('/post_failed');
         }
     });
 });
@@ -124,8 +126,12 @@ app.post('/cadastrar_posts', (req, res) => {
 
 // Rota para a página cadastro do post
 app.get('/cadastrar_posts', (req, res) => {
-    // Quando for renderizar páginas pelo EJS, passe parametros para ele em forma de JSON
-    res.render('pages/cadastrar_posts', { req: req });
+    if(req.session.loggedin) {
+// Quando for renderizar páginas pelo EJS, passe parametros para ele em forma de JSON
+res.render('pages/cadastrar_posts', { req: req });
+    } else {
+        res.redirect('/login_failed');
+    }
 });
 
 // Rotas para cadastrar
@@ -182,6 +188,11 @@ app.get('/register_ok', (req, res) => {
 app.get('/login_failed', (req, res) => {
     res.render('pages/login_failed', { req: req });
 });
+
+app.get('/post_failed', (req, res) => {
+    res.render('pages/post_failed', { req: req });
+});
+
 
 // Rota para a página do painel
 app.get('/dashboard', (req, res) => {
