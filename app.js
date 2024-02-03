@@ -181,6 +181,10 @@ app.get('/register_failed', (req, res) => {
     res.render('pages/register_failed', { req: req });
 });
 
+app.get('/register_failed', (req, res) => {
+    res.render('pages/register_failed', { req: req });
+});
+
 app.get('/register_ok', (req, res) => {
     res.render('pages/register_ok', { req: req });
 });
