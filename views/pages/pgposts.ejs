@@ -1,13 +1,43 @@
+<!-- Sua página oficial -->
+
 <!DOCTYPE html>
 <html lang="ptbr">
 
 <head>
     <%- include('../partials/head'); %>
+    <!-- Adicione os links do Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        /* Adicione estilos personalizados aqui */
+        .blog-post-container {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #ced4da; /* Adiciona borda fina */
+            border-radius: 8px; /* Adiciona bordas redondas */
+            padding: 15px; /* Adiciona um pouco de espaçamento interno */
+            transition: box-shadow 0.3s; /* Adiciona uma transição suave na sombra */
+        }
+
+        .blog-post-container:hover {
+            box-shadow: 0 0 19px rgba(0, 0, 0, 0.8); /* Adiciona sombra preta embaixo no hover */
+        }
+
+        .blog-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .blog-content {
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body class="container">
 
     <header>
+        
         <%- include('../partials/header'); %>
         <% if(req.session.loggedin) { %>
         <%- include('../partials/menu_dashboard'); %>
@@ -15,8 +45,12 @@
     </header>
 
     <main>
+        <h1>Posts</h1>
         <div>
-            <%- include('../partials/posts'); %>
+            <% posts.forEach(post => { %>
+                <!-- Inclua o partial aqui -->
+                <%- include('../partials/posts', { post: post }) %>
+            <% }) %>
         </div>
     </main>
 
@@ -24,5 +58,11 @@
         <%- include('../partials/footer'); %>
     </footer>
 
-  
+    <!-- Adicione os scripts do Bootstrap 4 JS (opcional) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </body>
+
+</html>

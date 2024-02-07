@@ -46,7 +46,7 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
     // Passe a variável 'req' para o template e use-a nas páginas para renderizar partes do HTML conforme determinada condição
     // Por exemplo de o usuário estive logado, veja este exemplo no arquivo views/partials/header.ejs
-    res.render('pages/index', { req: req });
+    res.redirect('/pgposts')
     // Caso haja necessidade coloque pontos de verificação para verificar pontos da sua logica de negócios
     console.log(`${req.session.username ? `Usuário ${req.session.username} logado no IP ${req.connection.remoteAddress}` : 'Usuário não logado.'}  `);
     //console.log(req.connection)
@@ -65,13 +65,14 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/pgposts', (req, res) => {
-    const dados = [
-        { titulo: "Post 1", conteudo: "Conteúdo Post 1" },
-        { titulo: "Post 2", conteudo: "Conteúdo Post 2" },
-        { titulo: "Post 3", conteudo: "Conteúdo Post 3" }
-     ];
-    res.render('pages/pgposts', { req: req, posts: dados})
+    const query = 'SELECT * FROM posts;'
+    
+    db.query(query, (err, results) => {
+        if (err) throw err;
+    
+    res.render('pages/pgposts', { req: req, posts: results})
 });
+})
 
 // Rota para processar o formulário de login
 app.post('/login', (req, res) => {
