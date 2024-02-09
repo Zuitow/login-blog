@@ -20,6 +20,7 @@
         <div class="jumbotron">
             <% if (hasPosts) { %>
                 <!-- Exiba a lista de posts -->
+                   <p><strong>Quantidade de Posts: </strong><%= totalPosts %></p>
                 <%- include('../partials/deleteposts', { posts: posts }) %>
             <% } else { %>
                 <!-- Exiba a mensagem "Não há Posts." -->

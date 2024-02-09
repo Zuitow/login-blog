@@ -73,7 +73,7 @@ app.get('/lista_posts', (req, res) => {
             // Verifica se há algum post
             const hasPosts = results.length > 0;
 
-            res.render('pages/lista_posts', { req: req, posts: results, hasPosts: hasPosts });
+            res.render('pages/lista_posts', { req: req, posts: results, hasPosts: hasPosts, totalPosts: results.length });
         });
     } else {
         res.redirect('/login_failed');
@@ -88,7 +88,7 @@ app.get('/pgposts', (req, res) => {
     db.query(query, (err, results) => {
         if (err) throw err;
     
-    res.render('pages/pgposts', { req: req, posts: results})
+    res.render('pages/pgposts', { req: req, posts: results, totalPosts: results.length })
 });
 })
 
