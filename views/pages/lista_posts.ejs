@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ptbr">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+
+  <header>
+    <%- include('../partials/header'); %>
+    <% if(req.session.loggedin) { %>
+    <%- include('../partials/menu_dashboard'); %>
+    <% } %>
+  </header>
+<!-- lista_posts.ejs -->
+
+<div class="row">
+    <div class="col-sm-8">
+        <div class="jumbotron">
+            <% if (hasPosts) { %>
+                <!-- Exiba a lista de posts -->
+                <%- include('../partials/deleteposts', { posts: posts }) %>
+            <% } else { %>
+                <!-- Exiba a mensagem "Não há Posts." -->
+                <p>Não há Posts.</p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+</body>

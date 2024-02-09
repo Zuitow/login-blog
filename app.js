@@ -64,6 +64,24 @@ app.get('/about', (req, res) => {
     res.render('pages/about', { req: req, })
 });
 
+app.get('/lista_posts', (req, res) => {
+    const query = 'SELECT * FROM posts;';
+    if (req.session.loggedin) {
+        db.query(query, (err, results) => {
+            if (err) throw err;
+
+            // Verifica se há algum post
+            const hasPosts = results.length > 0;
+
+            res.render('pages/lista_posts', { req: req, posts: results, hasPosts: hasPosts });
+        });
+    } else {
+        res.redirect('/login_failed');
+    }
+});
+
+
+
 app.get('/pgposts', (req, res) => {
     const query = 'SELECT * FROM posts;'
     
@@ -73,6 +91,35 @@ app.get('/pgposts', (req, res) => {
     res.render('pages/pgposts', { req: req, posts: results})
 });
 })
+
+
+app.post('/deletePost', (req, res) => {
+    const postId = req.body.postId;
+  
+    // Implemente a lógica para excluir o post do banco de dados usando o postId
+    const sql = 'DELETE FROM posts WHERE id = ?';
+    db.query(sql, [postId], (err, result) => {
+      if (err) throw err;
+      console.log('Post excluído com sucesso.');
+  
+      // Redireciona para a página que exibe a lista atualizada de posts
+      res.redirect('/lista_posts');
+    });
+  });
+
+  // Rota para excluir todos os posts
+app.post('/deleteAllPosts', (req, res) => {
+    // Implemente a lógica para excluir todos os posts do banco de dados
+    const sql = 'DELETE FROM posts';
+    db.query(sql, (err, result) => {
+      if (err) throw err;
+      console.log('Todos os posts excluídos com sucesso.');
+  
+      // Redireciona para a página que exibe a lista atualizada de posts
+      res.redirect('/');
+    });
+  });
+  
 
 // Rota para processar o formulário de login
 app.post('/login', (req, res) => {
