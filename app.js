@@ -97,20 +97,28 @@ app.post('/login', (req, res) => {
 // Rota para processar o formulário de caastro depostagem
 app.post('/cadastrar_posts', (req, res) => {
     const { titulo, conteudo } = req.body;
-    const autor = "admin";
+
+    // Certifique-se de que o nome de usuário está na sessão após o login
+    const autor = req.session.username;
+
+    if (!autor) {
+        // Trate o caso em que o nome de usuário não está na sessão
+        res.redirect('/login'); // ou outra rota de login
+        return;
+    }
+
     const datapostagem = new Date();
 
-    // const query = 'SELECT * FROM users WHERE username = ? AND password = SHA1(?)';
-    const query = 'INSERT INTO posts (titulo, conteudo, autor, datapostagem) VALUES (?,?,?,?)';
+    const query = 'INSERT INTO posts (titulo, conteudo, autor, datapostagem) VALUES (?,?,?,NOW())';
 
     db.query(query, [titulo, conteudo, autor, datapostagem], (err, results) => {
         if (err) throw err;
-        console.log(`Rotina cadastrar posts: ${JSON.stringify(results)}`); //Sring imprimível
+        console.log(`Rotina cadastrar posts: ${JSON.stringify(results)}`);
+
         if (results.affectedRows > 0) {
             console.log('Cadastro de postagem OK')
             res.redirect('/dashboard');
         } else {
-            // res.send('Credenciais incorretas. <a href="/">Tente novamente</a>');
             res.redirect('/post_failed');
         }
     });
